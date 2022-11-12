@@ -93,6 +93,7 @@ for epoch in tqdm.tqdm(range(EPOCHS), desc='training'):
 
         with autocast(enabled=True):
             outputs = model(images)
+            assert outputs.dtype is torch.float16
             loss = criterion(outputs, labels)
 
         scaler.scale(loss).backward()
