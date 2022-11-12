@@ -11,10 +11,10 @@ import wandb
 
 from vit import ViT
 
-wandb.init(project="my-test-project")
+#wandb.init(project="my-test-project")
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--batch_size', default = 4, type = int)
+parser.add_argument('--batch_size', default = 2, type = int)
 args = parser.parse_args()
 
 DEVICE = 'cuda'
@@ -91,7 +91,7 @@ for epoch in tqdm.tqdm(range(EPOCHS), desc='training'):
         images = images.to(DEVICE)
         labels = labels.to(DEVICE)
 
-        with autocast(enabled=True):
+        with autocast(enabled=True, dtype=torch.float16):
             outputs = model(images)
             assert outputs.dtype is torch.float16
             loss = criterion(outputs, labels)
@@ -124,4 +124,4 @@ for epoch in tqdm.tqdm(range(EPOCHS), desc='training'):
     print(
         f"Epoch : {epoch+1} - loss : {epoch_loss:.4f} - acc: {epoch_acc:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_acc:.4f}\n"
     )
-    wandb.log({"epoch": epoch, "train loss": epoch_loss, "train acc": epoch_acc, "val loss": epoch_val_loss, "val acc": epoch_val_acc})
+    #wandb.log({"epoch": epoch, "train loss": epoch_loss, "train acc": epoch_acc, "val loss": epoch_val_loss, "val acc": epoch_val_acc})
